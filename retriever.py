@@ -31,22 +31,41 @@ STOP_WORDS = {
 DEFAULT_THRESHOLD = 0.10
 DEFAULT_TOP_K = 3
 
-# Longest first, so "ations" is tried before "ation" and "s".
-SUFFIXES = ["ations", "ation", "ings", "ing", "ies", "ers", "er", "ed", "es", "s"]
+# Tried longest first, so "ations" goes before "ation".
+SUFFIXES = ["ations", "ation", "ing", "er", "ed"]
+
+
+def depluralize(word):
+    """
+    Turn a plural into its singular.
+
+    English adds "es" only after s, x, z, ch and sh, and a bare "s" everywhere
+    else. Stripping "es" from every word that ends in it turns prices into
+    pric, which then never matches price. That bug is why a member asking
+    "what are your prices" got nothing back.
+    """
+    if len(word) <= 4:
+        return word
+    if word.endswith("ies"):
+        return word[:-3] + "y"
+    if word.endswith(("sses", "shes", "ches", "xes", "zes")):
+        return word[:-2]
+    if word.endswith("s") and not word.endswith("ss"):
+        return word[:-1]
+    return word
 
 
 def stem(word):
     """
-    Strip common suffixes so that class and classes, or cancel and cancelling,
-    collapse to the same token. Not a real Porter stemmer.
+    Collapse a word to a rough stem, so class and classes, or train and
+    trainer, become the same token. Not a real Porter stemmer.
     """
+    word = depluralize(word)
+
     for suffix in SUFFIXES:
         if word.endswith(suffix) and len(word) - len(suffix) >= 4:
-            word = word[: -len(suffix)]
-            break
+            return word[: -len(suffix)]
 
-    if word.endswith("i"):
-        word = word[:-1] + "y"
     return word
 
 

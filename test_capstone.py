@@ -8,7 +8,7 @@ No API key is needed. Retrieval, the tool functions, and the dispatch guard
 are deterministic Python, which is the part of an agent you can unit test.
 """
 from agent import dispatch
-from retriever import DEFAULT_THRESHOLD, Retriever
+from retriever import DEFAULT_THRESHOLD, Retriever, stem
 import tools
 from tools import (
     book_training_session,
@@ -22,6 +22,8 @@ from tools import (
 SHOULD_RETRIEVE = [
     ("what time do you open on saturday", "hours"),
     ("how much is a membership", "membership_price"),
+    ("what are the costs", "membership_price"),
+    ("what are your prices", "membership_price"),
     ("is there a student discount", "membership_price"),
     ("i want to cancel my membership", "cancel"),
     ("i want a break from the gym for a couple months", "freeze"),
@@ -83,6 +85,16 @@ def build_cases():
 
     retrieval, retrieve_scores, refuse_scores = retrieval_cases(retriever)
     cases.extend(retrieval)
+
+    # --- the stemmer ---
+    # A plural and its singular have to land on the same token, or a question
+    # phrased one way cannot find a document phrased the other way.
+    cases.append(("prices and price agree", stem("prices"), stem("price")))
+    cases.append(("classes and class agree", stem("classes"), stem("class")))
+    cases.append(("costs and cost agree", stem("costs"), stem("cost")))
+    cases.append(("facilities and facility agree", stem("facilities"), stem("facility")))
+    cases.append(("trainer and training agree", stem("trainer"), stem("training")))
+    cases.append(("a double s is not a plural", stem("class"), "class"))
 
     # --- normalize_day and normalize_time ---
     cases.append(("lowercase day is accepted", normalize_day("monday"), "Monday"))

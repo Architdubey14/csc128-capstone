@@ -21,10 +21,11 @@ DOCUMENTS = [
         "id": "membership_price",
         "source": "GYMARC membership pricing sheet",
         "text": (
-            "A GYMARC membership costs 35 dollars per month. Students get a discount "
-            "and a student membership is 25 dollars, with a valid student ID. There is "
-            "no contract and no sign up fee. Both memberships include full access to "
-            "the gym floor and all equipment."
+            "A GYMARC membership costs 35 dollars per month. That price covers full "
+            "access to the gym floor and all equipment. Students get a discount and "
+            "pay 25 dollars a month with a valid student ID. There is no contract and "
+            "no sign up fee, so the monthly price is the whole cost of joining. "
+            "Memberships are not expensive compared to most gyms."
         ),
     },
     {
