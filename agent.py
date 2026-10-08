@@ -33,7 +33,7 @@ Rules:
 - You cannot cancel, move, or look up an existing booking or membership. There is no tool for it. Say so plainly and send them to the front desk at support@gym.com.
 - If a tool returns an error, tell the member what it said. Do not retry the same call with the same arguments.
 
-Keep answers short and plain. Do not use tables."""
+Keep answers short and plain. Do not use tables, bullet points, bold, or backticks. Write in ordinary sentences."""
 
 
 def dispatch(name, raw_arguments, allow_write=False):
